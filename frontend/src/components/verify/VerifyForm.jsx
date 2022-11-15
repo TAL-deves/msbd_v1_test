@@ -136,9 +136,10 @@ const navigate = useNavigate();
           swal("Success", `${dataMsg}, You will be redirected to login`, "success", {timer: 1000});
           const response = login(email, password, (response) => {
             const localStorageService = LocalStorageService.getService(); 
-              setCurrentuser(response.data.data.data.user);
-              localStorageService.setToken(response.data.data.data);
-              if (response.data.data.data.user) {
+            console.log("login response ----  ", response);
+              setCurrentuser(response.data.data.user);
+              localStorageService.setToken(response.data.data);
+              if (response.data.data.user) {
                
                 navigate("/courses")
                 // window.location.href = "/courses";

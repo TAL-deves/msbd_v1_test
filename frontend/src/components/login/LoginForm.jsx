@@ -101,8 +101,8 @@ const LoginForm = (props) => {
   let obj = JSON.parse(JSON.parse(JSON.stringify(gobject)));
   let fbObj = JSON.parse(JSON.parse(JSON.stringify(fobject)));
 
-  // //console.log("nameg Object is ------ ", nameg);
-  // //console.log("gobject Object is ------ ", gobject);
+  console.log("nameg Object is ------ ", nameg);
+  console.log("gobject Object is ------ ", gobject);
 
 
   // //console.log("namef Object is ------ ", namef);
@@ -110,7 +110,7 @@ const LoginForm = (props) => {
 
   if (obj) {
     obj.request.ct = obj.request.ct.replaceAll(" ", "+");
-    // //console.log("updated gobject Object is ------ ", obj);
+    console.log("updated gobject Object is ------ ", obj);
 
     if (gobject !== null) {
       const { request, passphase } = obj;
