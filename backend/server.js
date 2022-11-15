@@ -106,6 +106,7 @@ app.use(
     origin: ["https://mindschoolbd.com/","https://www.mindschoolbd.com/","mindschoolbd.com"],
     methods: "GET,POST,PUT,DELETE",
     credentials: true,
+    exposedHeaders: ['x-auth-token']
   })
 );
 app.use(
