@@ -127,7 +127,7 @@ const LoginForm = (props) => {
       console.log("request   -------   ", request);
       
       var decryptedFromText = CryptoJS.AES.decrypt(
-        { ciphertext: CryptoJS.enc.Base64.parse(request) },
+        { ciphertext: CryptoJS.enc.Base64.parse(request.ct) },
         Key,
         {
           iv: IV,
