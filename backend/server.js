@@ -669,26 +669,26 @@ app.get(
 
 // ! ******* sign up google from mobile  *******/ (Encryption done)
 app.post("/api/signupmobile", async (req, res) => {
-try {
-  let recievedResponseData = decryptionOfData(req, res);
-  req.body = recievedResponseData;
+  try {
+    let recievedResponseData = decryptionOfData(req, res);
+    req.body = recievedResponseData;
 
-  let userExists = await signUpTemplateCopy.findOne({
-    googleId: req.body.googleId
-  })
-
-  // console.log("userExists   ----   ", userExists);
-
-  if(!userExists){
-    const signUpUser = new signUpTemplateCopy({
-      fullname: req.body.name,
-      username: req.body.googleId,
-      email: req.body.email,
-      password:req.body.googleId,
-      googleId: req.body.googleId
+    let userExists = await signUpTemplateCopy.findOne({
+      googleId: req.body.googleId,
     });
 
-    await signUpUser.save()
+    // console.log("userExists   ----   ", userExists);
+
+    if (!userExists) {
+      const signUpUser = new signUpTemplateCopy({
+        fullname: req.body.name,
+        username: req.body.googleId,
+        email: req.body.email,
+        password: req.body.googleId,
+        googleId: req.body.googleId,
+      });
+
+      await signUpUser.save();
       var options = {
         body: {
           grant_type: "password",
@@ -714,55 +714,48 @@ try {
       let token = await obtainToken(options);
       let foundtoken = token;
 
+      let responseToSend = encryptionOfData(foundtoken);
+
+      res.send(responseToSend);
+    } else {
+      var options = {
+        body: {
+          grant_type: "password",
+          username: req.body.googleId,
+          password: req.body.googleId,
+          loginMethod: "google",
+          profileName: req.body.name,
+        },
+        headers: {
+          "user-agent": "Thunder Client (https://www.thunderclient.com)",
+          accept: "*/*",
+          "content-type": "application/x-www-form-urlencoded",
+          authorization: "Basic YXBwbGljYXRpb246c2VjcmV0",
+          "content-length": "81",
+          "accept-encoding": "gzip, deflate, br",
+          host: process.env.SERVER_URL_DEVELOPMENT,
+          connection: "close",
+        },
+        method: "POST",
+        query: {},
+      };
+
+      let token = await obtainToken(options);
+      let foundtoken = token;
 
       let responseToSend = encryptionOfData(foundtoken);
 
-
       res.send(responseToSend);
-  } else {
-    var options = {
-      body: {
-        grant_type: "password",
-        username: req.body.googleId,
-        password: req.body.googleId,
-        loginMethod: "google",
-        profileName: req.body.name,
-      },
-      headers: {
-        "user-agent": "Thunder Client (https://www.thunderclient.com)",
-        accept: "*/*",
-        "content-type": "application/x-www-form-urlencoded",
-        authorization: "Basic YXBwbGljYXRpb246c2VjcmV0",
-        "content-length": "81",
-        "accept-encoding": "gzip, deflate, br",
-        host: process.env.SERVER_URL_DEVELOPMENT,
-        connection: "close",
-      },
-      method: "POST",
-      query: {},
-    };
-
-    let token = await obtainToken(options);
-    let foundtoken = token;
-
-    let responseToSend = encryptionOfData(foundtoken);
-
-
-    res.send(responseToSend);
-  }
-
-} catch (error) {
-  let setSendResponseData = new sendResponseData(null, 500, "Server error!");
+    }
+  } catch (error) {
+    let setSendResponseData = new sendResponseData(null, 500, "Server error!");
     let responseToSend = encryptionOfData(setSendResponseData.error());
 
     res.send(responseToSend);
-}
-})
-
+  }
+});
 
 // ! ******* login google from mobile *******/ (Encryption done)
-
-
 
 // ! ******* Clearing previous token data *******/ (Encryption done)
 app.post("/api/clearalltoken", async (req, res) => {
@@ -899,54 +892,45 @@ app.post("/api/signup", async (req, res, next) => {
       });
 
       // console.log(req.body);
-      // let smssent = JSON.parse(await sendSms({
-      //   reciever: req.body.phoneNumber,
-      //   OTP: otpGenerated
-      // }))
-      // if(smssent.status_code === 200){
-      signUpUser.save();
-      //   if (signUpUser) {
-      let setSendResponseData = new sendResponseData(
-        "User registered!",
-        202,
-        null
+      let smssent = JSON.parse(
+        await sendSms({
+          reciever: req.body.phoneNumber,
+          OTP: otpGenerated,
+        })
       );
-      let responseToSend = encryptionOfData(
-        setSendResponseData.successWithMessage()
-      );
+      if (smssent.status_code === 200) {
+        signUpUser.save();
+        if (signUpUser) {
+          let setSendResponseData = new sendResponseData(
+            "User registered!",
+            202,
+            null
+          );
+          let responseToSend = encryptionOfData(
+            setSendResponseData.successWithMessage()
+          );
 
-      res.send(responseToSend);
-      // res.send({
-      //   data: {
-      //     message: "User registered!",
-      //     // fullname: data.fullname,
-      //     // username: data.username,
-      //     // email: data.email,
-      //     // otp: data.otp, //temporary visible
-      //     // createdOn: data.creation_date,
-      //   },
-      //   result: {
-      //     isError: false,
-      //     status: 202,
-      //     errorMsg: "",
-      //   },
-      // });
-      // })
-      // .catch((error) => {
+          res.send(responseToSend);
+        } else {
+          let setSendResponseData = new sendResponseData(
+            null,
+            500,
+            "Server error"
+          );
+          let responseToSend = encryptionOfData(setSendResponseData.error());
 
-      // } else {
-      //   let setSendResponseData = new sendResponseData(null, 500, "Server error");
-      //   let responseToSend = encryptionOfData(setSendResponseData.error());
+          res.send(responseToSend);
+        }
+      } else {
+        let setSendResponseData = new sendResponseData(
+          null,
+          smssent.status_code,
+          "OTP service down! Please try again later."
+        );
+        let responseToSend = encryptionOfData(setSendResponseData.error());
 
-      //   res.send(responseToSend);
-      // }
-
-      // } else {
-      //   let setSendResponseData = new sendResponseData(null, smssent.status_code, "OTP service down! Please try again later.");
-      //   let responseToSend = encryptionOfData(setSendResponseData.error());
-
-      //   res.send(responseToSend);
-      // }
+        res.send(responseToSend);
+      }
     }
   } catch (error) {
     let setSendResponseData = new sendResponseData(null, 500, serverErrMsg);
@@ -1309,12 +1293,12 @@ app.post("/api/userprofile", async (req, res) => {
     req.body = recievedResponseData;
 
     let userSessionStatus = await tokenChecking(req);
-    if(userSessionStatus.data != null){
+    if (userSessionStatus.data != null) {
       console.log("User is allowed");
       let userProfileData = await signUpTemplateCopy.findOne({
         username: req.body.username,
       });
-  
+
       if (userProfileData) {
         let setSendResponseData = new sendResponseData(
           userProfileData,
@@ -1339,8 +1323,6 @@ app.post("/api/userprofile", async (req, res) => {
       let responseToSend = encryptionOfData(userSessionStatus);
       res.send(responseToSend);
     }
-
-    
   } catch (error) {
     let setSendResponseData = new sendResponseData("", 500, serverErrMsg);
     let responseToSend = encryptionOfData(setSendResponseData.error());
@@ -1905,7 +1887,6 @@ app.post("/api/courseavailed", async (req, res, next) => {
         res.send(responseToSend);
       }
     });
-
   } catch (error) {
     let setSendResponseData = new sendResponseData(null, 500, serverErrMsg);
 
