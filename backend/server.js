@@ -585,7 +585,7 @@ app.get(
     res.redirect(
       process.env.CLIENT_URL +
         `login?gusername=${userid}&gobject=${JSON.stringify(
-          setSendResponseData
+          responseToSend
         )}&profilename=${userinfo}`
     );
   }
@@ -649,7 +649,7 @@ app.get(
     res.redirect(
       process.env.CLIENT_URL +
         `login?fusername=${userid}&fobject=${JSON.stringify(
-          setSendResponseData
+          responseToSend
         )}&fprofilename=${profilename}`
     );
   }
