@@ -119,17 +119,28 @@ const LoginForm = (props) => {
     if (gobject !== null) {
       const { request, passphase } = obj;
 
-      let decryptedFromText = CryptoJS.AES.decrypt(
-        JsonFormatter.parse(JSON.stringify(request)),
+      // let decryptedFromText = CryptoJS.AES.decrypt(
+      //   JsonFormatter.parse(JSON.stringify(request)),
+      //   Key,
+      //   { iv: IV }
+      // );
+      var decryptedFromText = CryptoJS.AES.decrypt(
+        { ciphertext: CryptoJS.enc.Base64.parse(request) },
         Key,
-        { iv: IV }
+        {
+          iv: IV,
+          mode: CryptoJS.mode.CBC,
+        }
       );
 
-      // //console.log("decryptedFromText   -------   ", decryptedFromText);
+      // let obj = decryptedFromText.toString(CryptoJS.enc.Utf8);
+
+      // console.log("decryptedFromText   -------   ", decryptedFromText);
 
       let recievedData = decryptedFromText.toString(CryptoJS.enc.Utf8);
 
-      // //console.log("recievedData   -------   ", JSON.parse(recievedData));
+      console.log("recievedData JSON.parse  -------   ", JSON.parse(recievedData));
+      console.log("recievedData   -------   ", recievedData);
 
       let googleData = JSON.parse(recievedData);
 
