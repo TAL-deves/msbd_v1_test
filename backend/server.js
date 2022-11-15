@@ -102,11 +102,10 @@ mongoose.connect(process.env.DATABASE_CONNECT, function (err, res) {
 app.use(express.json());
 app.use(
   cors({
-    // origin: "*",
-    origin: ["https://mindschoolbd.com/","https://www.mindschoolbd.com/","mindschoolbd.com"],
+    origin: "*",
+    // origin: true,
     methods: "GET,POST,PUT,DELETE",
     credentials: true,
-    exposedHeaders: ['x-auth-token']
   })
 );
 app.use(
