@@ -103,7 +103,7 @@ const LoginForm = (props) => {
   let fbObj = JSON.parse(JSON.parse(JSON.stringify(fobject)));
 
   // //console.log("nameg Object is ------ ", nameg);
-  // //console.log("gobject Object is ------ ", gobject);
+  console.log("gobject Object is ------ ", gobject);
 
 
   // //console.log("namef Object is ------ ", namef);
