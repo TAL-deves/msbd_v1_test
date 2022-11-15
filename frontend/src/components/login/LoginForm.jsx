@@ -42,9 +42,13 @@ import { MuiTelInput } from "mui-tel-input";
 var CryptoJS = require("crypto-js");
 
 // Generate random 16 bytes to use as IV
+// var IV = CryptoJS.enc.Utf8.parse("1583288699248111");
+
+// var keyString = "thisIsAverySpecialSecretKey";
+
 var IV = CryptoJS.enc.Utf8.parse("1583288699248111");
 
-var keyString = "thisIsAverySpecialSecretKey";
+var keyString = "thisIsAverySpecialSecretKey00000";
 // finds the SHA-256 hash for the keyString
 var Key = CryptoJS.SHA256(keyString);
 
