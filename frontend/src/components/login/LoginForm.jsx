@@ -42,13 +42,10 @@ import { MuiTelInput } from "mui-tel-input";
 var CryptoJS = require("crypto-js");
 
 // Generate random 16 bytes to use as IV
-// var IV = CryptoJS.enc.Utf8.parse("1583288699248111");
-
-// var keyString = "thisIsAverySpecialSecretKey";
-
 var IV = CryptoJS.enc.Utf8.parse("1583288699248111");
 
-var keyString = "thisIsAverySpecialSecretKey00000";
+// var keyString = "thisIsAverySpecialSecretKey";
+const keyString = "thisIsAverySpecialSecretKey00000";
 // finds the SHA-256 hash for the keyString
 var Key = CryptoJS.SHA256(keyString);
 
@@ -105,8 +102,8 @@ const LoginForm = (props) => {
   let obj = JSON.parse(JSON.parse(JSON.stringify(gobject)));
   let fbObj = JSON.parse(JSON.parse(JSON.stringify(fobject)));
 
-  console.log("nameg Object is ------ ", nameg);
-  console.log("gobject Object is ------ ", gobject);
+  // //console.log("nameg Object is ------ ", nameg);
+  // //console.log("gobject Object is ------ ", gobject);
 
 
   // //console.log("namef Object is ------ ", namef);
@@ -114,35 +111,22 @@ const LoginForm = (props) => {
 
   if (obj) {
     obj.request.ct = obj.request.ct.replaceAll(" ", "+");
-    console.log("updated gobject Object is ------ ", obj);
+    // //console.log("updated gobject Object is ------ ", obj);
 
     if (gobject !== null) {
       const { request, passphase } = obj;
 
-      // let decryptedFromText = CryptoJS.AES.decrypt(
-      //   JsonFormatter.parse(JSON.stringify(request)),
-      //   Key,
-      //   { iv: IV }
-      // );
-      console.log("request   -------   ", request);
-      
-      var decryptedFromText = CryptoJS.AES.decrypt(
-        { ciphertext: CryptoJS.enc.Base64.parse(request.ct) },
+      let decryptedFromText = CryptoJS.AES.decrypt(
+        JsonFormatter.parse(JSON.stringify(request)),
         Key,
-        {
-          iv: IV,
-          mode: CryptoJS.mode.CBC,
-        }
+        { iv: IV }
       );
 
-      // let obj = decryptedFromText.toString(CryptoJS.enc.Utf8);
-
-      console.log("decryptedFromText   -------   ", decryptedFromText);
+      // //console.log("decryptedFromText   -------   ", decryptedFromText);
 
       let recievedData = decryptedFromText.toString(CryptoJS.enc.Utf8);
 
-      console.log("recievedData JSON.parse  -------   ", JSON.parse(recievedData));
-      console.log("recievedData   -------   ", recievedData);
+      // //console.log("recievedData   -------   ", JSON.parse(recievedData));
 
       let googleData = JSON.parse(recievedData);
 
