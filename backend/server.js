@@ -668,92 +668,92 @@ app.get(
 // });
 
 // ! ******* sign up google from mobile  *******/ (Encryption done)
-// app.post("/api/signupmobile", async (req, res) => {
-//   try {
-//     let recievedResponseData = decryptionOfData(req, res);
-//     req.body = recievedResponseData;
+app.post("/api/signupmobile", async (req, res) => {
+  try {
+    let recievedResponseData = decryptionOfData(req, res);
+    req.body = recievedResponseData;
 
-//     let userExists = await signUpTemplateCopy.findOne({
-//       googleId: req.body.googleId,
-//     });
+    let userExists = await signUpTemplateCopy.findOne({
+      googleId: req.body.googleId,
+    });
 
-//     // console.log("userExists   ----   ", userExists);
+    // console.log("userExists   ----   ", userExists);
 
-//     if (!userExists) {
-//       const signUpUser = new signUpTemplateCopy({
-//         fullname: req.body.name,
-//         username: req.body.googleId,
-//         email: req.body.email,
-//         password: req.body.googleId,
-//         googleId: req.body.googleId,
-//       });
+    if (!userExists) {
+      const signUpUser = new signUpTemplateCopy({
+        fullname: req.body.name,
+        username: req.body.googleId,
+        email: req.body.email,
+        password: req.body.googleId,
+        googleId: req.body.googleId,
+      });
 
-//       await signUpUser.save();
-//       var options = {
-//         body: {
-//           grant_type: "password",
-//           username: req.body.googleId,
-//           password: req.body.googleId,
-//           loginMethod: "google",
-//           profileName: req.body.name,
-//         },
-//         headers: {
-//           "user-agent": "Thunder Client (https://www.thunderclient.com)",
-//           accept: "*/*",
-//           "content-type": "application/x-www-form-urlencoded",
-//           authorization: "Basic YXBwbGljYXRpb246c2VjcmV0",
-//           "content-length": "81",
-//           "accept-encoding": "gzip, deflate, br",
-//           host: process.env.SERVER_URL_DEVELOPMENT,
-//           connection: "close",
-//         },
-//         method: "POST",
-//         query: {},
-//       };
+      await signUpUser.save();
+      var options = {
+        body: {
+          grant_type: "password",
+          username: req.body.googleId,
+          password: req.body.googleId,
+          loginMethod: "google",
+          profileName: req.body.name,
+        },
+        headers: {
+          "user-agent": "Thunder Client (https://www.thunderclient.com)",
+          accept: "*/*",
+          "content-type": "application/x-www-form-urlencoded",
+          authorization: "Basic YXBwbGljYXRpb246c2VjcmV0",
+          "content-length": "81",
+          "accept-encoding": "gzip, deflate, br",
+          host: process.env.SERVER_URL_DEVELOPMENT,
+          connection: "close",
+        },
+        method: "POST",
+        query: {},
+      };
 
-//       let token = await obtainToken(options);
-//       let foundtoken = token;
+      let token = await obtainToken(options);
+      let foundtoken = token;
 
-//       let responseToSend = encryptionOfData(foundtoken);
+      let responseToSend = encryptionOfData(foundtoken);
 
-//       res.send(responseToSend);
-//     } else {
-//       var options = {
-//         body: {
-//           grant_type: "password",
-//           username: req.body.googleId,
-//           password: req.body.googleId,
-//           loginMethod: "google",
-//           profileName: req.body.name,
-//         },
-//         headers: {
-//           "user-agent": "Thunder Client (https://www.thunderclient.com)",
-//           accept: "*/*",
-//           "content-type": "application/x-www-form-urlencoded",
-//           authorization: "Basic YXBwbGljYXRpb246c2VjcmV0",
-//           "content-length": "81",
-//           "accept-encoding": "gzip, deflate, br",
-//           host: process.env.SERVER_URL_DEVELOPMENT,
-//           connection: "close",
-//         },
-//         method: "POST",
-//         query: {},
-//       };
+      res.send(responseToSend);
+    } else {
+      var options = {
+        body: {
+          grant_type: "password",
+          username: req.body.googleId,
+          password: req.body.googleId,
+          loginMethod: "google",
+          profileName: req.body.name,
+        },
+        headers: {
+          "user-agent": "Thunder Client (https://www.thunderclient.com)",
+          accept: "*/*",
+          "content-type": "application/x-www-form-urlencoded",
+          authorization: "Basic YXBwbGljYXRpb246c2VjcmV0",
+          "content-length": "81",
+          "accept-encoding": "gzip, deflate, br",
+          host: process.env.SERVER_URL_DEVELOPMENT,
+          connection: "close",
+        },
+        method: "POST",
+        query: {},
+      };
 
-//       let token = await obtainToken(options);
-//       let foundtoken = token;
+      let token = await obtainToken(options);
+      let foundtoken = token;
 
-//       let responseToSend = encryptionOfData(foundtoken);
+      let responseToSend = encryptionOfData(foundtoken);
 
-//       res.send(responseToSend);
-//     }
-//   } catch (error) {
-//     let setSendResponseData = new sendResponseData(null, 500, "Server error!");
-//     let responseToSend = encryptionOfData(setSendResponseData.error());
+      res.send(responseToSend);
+    }
+  } catch (error) {
+    let setSendResponseData = new sendResponseData(null, 500, "Server error!");
+    let responseToSend = encryptionOfData(setSendResponseData.error());
 
-//     res.send(responseToSend);
-//   }
-// });
+    res.send(responseToSend);
+  }
+});
 
 // ! ******* login google from mobile *******/ (Encryption done)
 
